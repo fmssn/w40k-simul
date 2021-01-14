@@ -174,12 +174,12 @@ defender = {'T': 5, 'W': 1, 'Sv': 3, 'iSv': 7}
 
 
 OBSCURED = False
-NECRONS = False
-FEEL_NO_PAIN = 5
+NECRONS = True
+FEEL_NO_PAIN = False
 
 # Rerolls possible?
 RR_HIT_1 = False
-RR_HIT_ALL = True
+RR_HIT_ALL = False
 RR_WOUND_1 = False
 RR_WOUND_ALL = False
 

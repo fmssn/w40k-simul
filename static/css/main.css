@@ -1,0 +1,50 @@
+body, html {
+    background: #DCDCDC;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.content {
+    margin: 0 auto;
+}
+
+table, td, th {
+    border: 1px solid #aaa;
+}
+
+table.entrytable table, table.entrytable td, table.entrytable th{
+    border-collapse: collapse;
+    border-style: hidden;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+
+table {
+    border-collapse: collapse;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+th {
+    height: 30px;
+    background: #000000;
+    color:white;
+}
+
+.submittype {
+    width: 300px;
+}
+
+td {
+    text-align: center;
+    padding: 3px;
+}
+
+.form {
+    margin-top: 20px;
+}
+
+#content {
+    width: 70%;
+}

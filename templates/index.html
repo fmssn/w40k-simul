@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>w40ksimul</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center;">Warhammer Killteam Simulation</h1>
+    <div class="form">
+        <form action="/" method="POST">
+            <table class="entrytable">
+                <tr>
+                    <td>
+                        <h5>Attacks</h5>
+                        <input type="int" name="A" value="{{request.form['A']}}">                    
+                    </td>
+                    <td>
+                        <h5>WS/BS</h5>
+                        <input type="int" name="WS/BS" value="{{request.form['WS/BS']}}">  
+                    </td>
+                    <td>
+                        <h5>Strength</h5>
+                        <input type="int" name="S" value="{{request.form['S']}}">  
+                    </td>
+                    <td>
+                        <h5>AP</h5>
+                        <input type="int" name="AP" value="{{request.form['AP']}}">  
+                    </td>
+                    <td>
+                        <h5>Damage</h5>
+                        <input type="int" name="D" value="{{request.form['D']}}">  
+                    </td>
+                </tr>
+                <tr> 
+                    <td>
+                        <h5>Toughness</h5>
+                        <input type="int" name="T" value="{{request.form['T']}}">                    
+                    </td>
+                    <td>
+                        <h5>Wounds</h5>
+                        <input type="int" name="W" value="{{request.form['W']}}">   
+                    </td>
+                    <td>
+                        <h5>Save</h5>
+                        <input type="int" name="Sv" value="{{request.form['Sv']}}">  
+                    </td>
+                    <td>
+                        <h5>Invulnerable Save</h5>
+                        <input type="int" name="iSv" value="{{request.form['iSv']}}">  
+                    </td>
+                </tr>
+            </table>
+            <div style="text-align:center">
+                <br></br>
+                <input class="submittype" name="button" type="submit" value="Simulate">
+            </div>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}
