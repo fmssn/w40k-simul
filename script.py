@@ -92,6 +92,10 @@ def save(wounds, ap, inv_save, save):
     return unsaved_wounds
 
 def make_dmg(damage, unsaved_wounds):
+    if FEEL_NO_PAIN:
+        rolls = roll_dices(damage*unsaved_wounds)
+        saved = sum([dice >= FEEL_NO_PAIN for dice in rolls])
+        return unsaved_wounds * damage - saved
     return unsaved_wounds * damage
 
 def injury_roll(damage):
@@ -107,6 +111,8 @@ def injury_roll(damage):
         return False
     would_kill = [dice >= to_kill for dice in rolls]
     return sum(would_kill)>0
+
+
     
 
 def simulateAllRolls(attacker, defender, n_simulations, n_attackers=1):
@@ -163,16 +169,17 @@ P_kiss = {'A': 4, 'WS/BS': 3, 'S': 4, 'AP': -1, 'D': 'D3'} # Player with Harlequ
 # Globals
 N = 10**4
 
-attacker = P_kiss #{'A': 4, 'WS/BS': 3, 'S': 4, 'AP': -1, 'D': 'D3'}
-defender = MEQ #{'T': 4, 'W': 1, 'Sv': 3, 'iSv': 7}
+attacker = {'A': 3, 'WS/BS': 3, 'S': 7, 'AP': -4, 'D': 2}
+defender = {'T': 5, 'W': 1, 'Sv': 3, 'iSv': 7}
 
 
 OBSCURED = False
 NECRONS = False
+FEEL_NO_PAIN = 5
 
 # Rerolls possible?
 RR_HIT_1 = False
-RR_HIT_ALL = False
+RR_HIT_ALL = True
 RR_WOUND_1 = False
 RR_WOUND_ALL = False
 
