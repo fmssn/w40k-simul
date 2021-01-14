@@ -49,14 +49,35 @@
                         <h5>Invulnerable Save</h5>
                         <input type="int" name="iSv" value="{{request.form['iSv']}}">  
                     </td>
+                    <td>
+                        <h5>Feel No Pain</h5>
+                        <input type="int" name="FNP" value="{{request.form['FNP']}}">  
+                    </td>
                 </tr>
             </table>
             <div style="text-align:center">
                 <br></br>
                 <input class="submittype" name="button" type="submit" value="Simulate">
+                <br></br>
             </div>
-            
         </form>
     </div>
+    <div>
+    {% if results %}
+        <h3 style='text-align: center;'>Average result for 10.000 simulations</h3>
+        <table>
+        {% for key, value in results.items() %}
+            <tr>
+                <th> {{ key }}</th>
+                <td> {{ value }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+    </div>
+    <br></br>
+    <span>
+        This application is a simulation and does not calculate explicit expectation values. Why did I choose that? It is way easier to implement certain exception rules (like 'D6' for damage, obscurity) with a simulation. But, as this is a Monte-Carlo-Simulation for currently 10.000 rounds, you will see deviation from simulation to simulation for the same values. As I will increase performance, I will probably be able to bump it up to 100.000 simulation, which will further decrease deviations between simulations.
+    </span>
 </div>
 {% endblock %}

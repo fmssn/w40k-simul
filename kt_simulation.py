@@ -5,8 +5,6 @@ Spyder Editor
 This is a temporary script file.
 """
 import pandas as pd
-import matplotlib.pyplot as plt
-plt.style.use('ggplot')
 from random import randrange 
 
 def diceroll():
@@ -19,7 +17,7 @@ def roll_dices(n):
         rolls.append(roll)
     return rolls
 
-def hit(attacks, ws_bs):
+def hit(attacks, ws_bs, **kwargs):
     # Determine what dice is hit
     to_hit = ws_bs
     if OBSCURED:
@@ -43,7 +41,7 @@ def hit(attacks, ws_bs):
     hits = sum(hitted)  
     return hits
 
-def wound(hits, strength, toughness):
+def wound(hits, strength, toughness, **kwargs):
     if strength >= 2*toughness:
         to_wound = 2
     elif strength > toughness:
@@ -74,9 +72,8 @@ def wound(hits, strength, toughness):
     wounded = [dice >= to_wound for dice in rolls]
     wounds = sum(wounded)  
     return wounds
-
-        
-def save(wounds, ap, inv_save, save):
+      
+def save(wounds, ap, inv_save, save, **kwargs):
     if abs(ap) + save > inv_save:
         to_save = inv_save
     else:
@@ -91,14 +88,14 @@ def save(wounds, ap, inv_save, save):
     unsaved_wounds = sum(unsaved)  
     return unsaved_wounds
 
-def make_dmg(damage, unsaved_wounds):
-    if FEEL_NO_PAIN:
+def make_dmg(damage, feel_no_pain, unsaved_wounds, **kwargs):
+    if feel_no_pain != 7:
         rolls = roll_dices(damage*unsaved_wounds)
-        saved = sum([dice >= FEEL_NO_PAIN for dice in rolls])
+        saved = sum([dice >= feel_no_pain for dice in rolls])
         return unsaved_wounds * damage - saved
     return unsaved_wounds * damage
 
-def injury_roll(damage):
+def injury_roll(damage, **kwargs):
     to_kill = 4
     if OBSCURED:
         to_kill += 1
@@ -112,40 +109,92 @@ def injury_roll(damage):
     would_kill = [dice >= to_kill for dice in rolls]
     return sum(would_kill)>0
 
-
+def random_stat(stat_string):
+    roll_value = int(stat_string.strip('D'))
+    return randrange(1, roll_value+1)
     
 
-def simulateAllRolls(attacker, defender, n_simulations, n_attackers=1):
+def formatAttacker(attackerArg):
+    '''Formats the attackers stats to int. Strips + for e.g. WS 3+
+    and sets random value for e.g. "D6".''' # TODO Major Perfomance Issues
+    attacker = dict(attackerArg)
+    # Attacks
+    if 'D' in attacker['A']:
+        attacker['A'] = random_stat(attacker['A'])
+    else:
+        attacker['A'] = int(attacker['A'])
+    # Weapon Skill / Ballistic Skill
+    if '+' in attacker['WS/BS']:
+        attacker['WS/BS'] = int(attacker['WS/BS'].strip('+'))
+    else:
+        attacker['WS/BS'] = int(attacker['WS/BS'])
+    # Strength
+    attacker['S'] = int(attacker['S'])
+    # Armor Penetration
+    if attacker['AP'] == '':
+        attacker['AP'] = 0
+    else:
+        attacker['AP'] = -abs(int(attacker['AP']))
+    # Damage
+    if 'D' in attacker['D']:
+        attacker['D'] = random_stat(attacker['D'])
+    else:
+        attacker['D'] = int(attacker['D'])
+    return attacker
+
+def formatDefender(defenderArg):
+    '''Formats the defenders stats to int. Strips + for e.g. Sv 3+
+    and sets random value for e.g. "D6".'''
+    defender = dict(defenderArg)
+    # Toughness
+    defender['T'] = int(defender['T'])
+    # Wounds
+    defender['W'] = int(defender['W'])
+    # Save (normal)
+    if '+' in defender['Sv']:
+        defender['Sv'] = int(defender['Sv'].strip('+'))
+    elif defender['Sv'] == '':
+        defender['Sv'] = 7
+    else:
+        defender['Sv'] = int(defender['Sv'])
+    # Invulnerable Save
+    if '+' in defender['iSv']:
+        defender['iSv'] = int(defender['iSv'].strip('+'))
+    elif defender['iSv'] == '':
+        defender['iSv'] = 7
+    else:
+        defender['iSv'] = int(defender['iSv'])
+    # Feel No Pain
+    if '+' in defender['FNP']:
+        defender['FNP'] = int(defender['FNP'].strip('+'))
+    elif defender['FNP'] == '':
+        defender['FNP'] = 7
+    else:
+        defender['FNP'] = int(defender['FNP'])
+    return defender
+
+def simulateAllRolls(attackerArg, defenderArg, n_simulations, **kwargs):
     results = {'hits': [], 'wounds': [], 'unsaved_wounds': [], 
                'damage_inflicted': [], 'injury_rolled': [], 'killed_model': []}
     for i in range(0,n_simulations):
-        # Determine weapon attributes if random
-        attacks = attacker['A']
-        if isinstance(attacks, str):
-            random_attacks = int(attacks.strip('D'))
-            attacks = randrange(1,random_attacks+1)
-        
-        damage = attacker['D']
-        if isinstance(damage, str):
-            random_damage = int(damage.strip('D'))
-            damage = randrange(1,random_damage+1)
-        
-            
+        # Format dicts to int
+        attacker = formatAttacker(attackerArg)
+        defender = formatDefender(defenderArg)
         # Hit roll
-        hits = hit(attacks, attacker['WS/BS'])
+        hits = hit(attacker['A'], attacker['WS/BS'], **kwargs)
         results['hits'].append(hits)
         
         # Wound roll
-        wounds = wound(hits, attacker['S'], defender['T'])
+        wounds = wound(hits, attacker['S'], defender['T'], **kwargs)
         results['wounds'].append(wounds)
         
         # Save roll
         unsaved_wounds = save(wounds, attacker['AP'], inv_save = defender['iSv'], 
-                              save = defender['Sv'])
+                              save = defender['Sv'], **kwargs)
         results['unsaved_wounds'].append(unsaved_wounds)
         
         # Inflict damage
-        damage_inflicted = make_dmg(damage, unsaved_wounds)
+        damage_inflicted = make_dmg(attacker['D'], defender['FNP'], unsaved_wounds, **kwargs)
         wounds_left = defender['W'] - damage_inflicted
         results['damage_inflicted'].append(damage_inflicted)
         
@@ -155,13 +204,13 @@ def simulateAllRolls(attacker, defender, n_simulations, n_attackers=1):
             results['killed_model'].append(False)
         else:
             results['injury_rolled'].append(True)
-            killed = injury_roll(damage)
+            killed = injury_roll(attacker['D'], **kwargs)
             results['killed_model'].append(killed)
-    return results       
-
+    df_results = pd.DataFrame(data=results).mean() # Get average over all results
+    return df_results.to_dict()       
 
 # default characteristics
-MEQ = {'T': 4, 'W': 1, 'Sv': 3, 'iSv': 7} # Space Marine equivalent
+MEQ = {'T': 4, 'W': 1, 'Sv': 3, 'iSv': 7, 'FNP':7} # Space Marine equivalent
 P_kiss = {'A': 4, 'WS/BS': 3, 'S': 4, 'AP': -1, 'D': 'D3'} # Player with Harlequins Kiss
 
 
@@ -169,13 +218,8 @@ P_kiss = {'A': 4, 'WS/BS': 3, 'S': 4, 'AP': -1, 'D': 'D3'} # Player with Harlequ
 # Globals
 N = 10**4
 
-attacker = {'A': 3, 'WS/BS': 3, 'S': 7, 'AP': -4, 'D': 2}
-defender = {'T': 5, 'W': 1, 'Sv': 3, 'iSv': 7}
-
-
 OBSCURED = False
-NECRONS = True
-FEEL_NO_PAIN = False
+NECRONS = False
 
 # Rerolls possible?
 RR_HIT_1 = False
@@ -185,12 +229,6 @@ RR_WOUND_ALL = False
 
     
 if __name__ == '__main__':
-    result_dict = simulateAllRolls(attacker, defender, N)
-    df = pd.DataFrame(data=result_dict)
-    print(df.mean())
-
-        
-        
-        
-        
-        
+    print(simulateAllRolls(attacker, defender, N))
+    #df = pd.DataFrame(data=result_dict)
+    #print(df.mean())
