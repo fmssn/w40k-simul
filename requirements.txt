@@ -1,23 +1,26 @@
-astroid @ file:///D:/bld/astroid_1602489393750/work
+astroid==2.4.2
 certifi==2020.12.5
 click==7.1.2
-colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+colorama==0.4.4
 Flask==1.1.2
 Flask-SQLAlchemy==2.4.4
-isort @ file:///home/conda/feedstock_root/build_artifacts/isort_1609383438461/work
+isort==5.7.0
 itsdangerous==1.1.0
 Jinja2==2.11.2
-lazy-object-proxy @ file:///D:/bld/lazy-object-proxy_1602435572008/work
-MarkupSafe @ file:///D:/bld/markupsafe_1610127683324/work
+lazy-object-proxy==1.4.3
+MarkupSafe==1.1.1
 mccabe==0.6.1
-numpy @ file:///D:/bld/numpy_1610324782150/work
-pandas @ file:///D:/bld/pandas_1610610336238/work
-pylint @ file:///D:/bld/pylint_1602598303351/work
+numpy==1.19.5
+pandas==1.2.0
+pip==20.3.3
+pylint==2.6.0
 python-dateutil==2.8.1
-pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1608904108784/work
-six @ file:///home/conda/feedstock_root/build_artifacts/six_1590081179328/work
-SQLAlchemy @ file:///D:/bld/sqlalchemy_1610127418673/work
-toml @ file:///home/conda/feedstock_root/build_artifacts/toml_1604308577558/work
+pytz==2020.5
+setuptools==49.6.0.post20210108
+six==1.15.0
+SQLAlchemy==1.3.22
+toml==0.10.2
 Werkzeug==1.0.1
+wheel==0.36.2
 wincertstore==0.2
-wrapt @ file:///D:/bld/wrapt_1602463535053/work
+wrapt==1.11.2
