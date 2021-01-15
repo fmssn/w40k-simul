@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Killteam Simulation</title>
+<title>KTS - Killteam Simulation</title>
 {% endblock %}
 
 {% block body %}
 <div class="content">
-    <h1 style="text-align: center;">Warhammer Killteam Simulation</h1>
+    <h1 style="text-align: center;">KTS - Warhammer Killteam Simulation</h1>
     <div class="form">
         <form action="/" method="POST">
             <table class="entrytable">
@@ -57,10 +57,10 @@
                 <tr>
                     <td>
                         <input type="checkbox" name="obscured" value="OBSCURED" unchecked>
-                        <label for="obscured">Obscured (Shooting)</label>
+                        <label for="obscured"><h6>Obscured (Shooting)</h6></label>
                     </td>
                     <td>
-                        <label for="hit_reroll">Hit Re-Rolls</label>
+                        <label for="hit_reroll"><h6>Hit Re-Rolls</h6></label>
                         <br></br>
                         <select name="hit_reroll">
                             <option value="RR_HIT_NONE">No rerolls</option>
@@ -69,7 +69,7 @@
                         </select>
                     </td>
                     <td>
-                        <label for="wound_reroll">Wound Re-Rolls</label>
+                        <label for="wound_reroll"><h6>Wound Re-Rolls</h6></label>
                         <br></br>
                         <select name="wound_reroll">
                             <option value="RR_WOUND_NONE">No rerolls</option>
@@ -77,6 +77,28 @@
                             <option value="RR_WOUND_ALL">Reroll all failed</option>
                         </select>
                     </td>
+                    <td>
+                        <label for="FLESH_WOUND"><h6>Flesh Wounds (Defender)</h6></label>
+                        <br></br>
+                        <select name="FLESH_WOUND">
+                            <option value="0">No Flesh Wound</option>
+                            <option value="1">1 Flesh Wounds</option>
+                            <option value="2">2 Flesh Wounds</option>
+                            <option value="3">3 Flesh Wounds</option>
+                        </select>
+                    </td>
+                    <!--
+                    <td>
+                        <select name="ddl" size=4 multiple>
+                            <option value='blue'>Blue</option>
+                            <option value='green'>Green</option>
+                            <option value='red'>Red</option>
+                            <option value='yellow'>Yelllow</option>
+                            <option value='' selected>Select a Color </option>
+                            <option value='white'>White</option>
+                        </select>
+                    </td> 
+                    -->
                 </tr>
             </table>
             <div style="text-align:center">
@@ -100,8 +122,27 @@
     {% endif %}
     </div>
     <br></br>
-    <span>
+    <span style="padding-bottom: 2cm;">
+        <h3>Stat Help</h4>
+        <h4>Attacker</h4>
+        <p><b>• Attacks </b> – The attacks of the model. Can be of format 2D6 or D3 (or just 2). Mustn't be empty.</p>
+        <p><b>• WS/BS </b> – The weapon skill or ballistic skill of the Model. Can be of format 3 or 3+ or. Can also be 'a'/'A'/'auto'/'Autohit' or at least contain an 'a' for auto hitting weapons. For the moment, if there are plain hit-modifiers (not talking of obscurity), please add or substract them here. Mustn't be empty.</p>
+        <p><b>• Strength </b> – The strength of the weapon. Mustn't be empty.</p>
+        <p><b>• AP </b> – The armor penetration value of the weapon. May be of format 3 or -3, it will always be counted as minus. May be empty.</p>
+        <p><b>• Damage </b> – The damage value of the weapon. Can be of format 2D6 or D3 (or just 2). Mustn't be empty.</p>
+        <h4>Defender</h4>
+        <p><b>• Toughness </b> – The toughness of the model. Mustn't be empty.</p>
+        <p><b>• Wounds </b> – (Remaining) wounds of the model. Mustn't be empty.</p>
+        <p><b>• Save </b> – The save value of the model. May be of format 2 or 3+. May be empty, is then counted as 7+.</p>
+        <p><b>• Invulnerable Save </b> – The invulnerable save of the model. Can be of format 4 or 3+. May be empty.</p>
+        <p><b>• Feel No Pain</b> – This is the effect for e.g. Deathguard, which rolls a D6 on each inflicted wound, on a 5 up it is then ignored. If talking of Deathguard, enter a 5 or 5+. For other Feel No Pain effects, enter the roll value (e.g. 6+ or 6). May be empty.</p>
+        <br>
+        <h4>Remark</h4>
         This application is a simulation and does not calculate explicit expectation values. Why did I choose that? It is way easier to implement certain exception rules (like 'D6' for damage, obscurity) with a simulation. But, as this is a Monte-Carlo-Simulation for currently 10.000 rounds, you will see deviation from simulation to simulation for the same values. As I will increase performance, I will probably be able to bump it up to 100.000 simulation, which will further decrease deviations between simulations.
+        <br><br>
+        Next thing I will be implementing are Exploding 6s on hit and wound rolls as well as the Necron Reanimation Protocols.
+        <br><br>
+        If you are missing a feature or have any other criticism, feel free to hit me up on Discord: <b>alpecinjunky (Babyl0n)#7488</b>
     </span>
 </div>
 {% endblock %}

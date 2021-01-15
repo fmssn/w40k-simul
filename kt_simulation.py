@@ -96,11 +96,9 @@ def make_dmg(damage, feel_no_pain, unsaved_wounds, **kwargs):
     return unsaved_wounds * damage
 
 def injury_roll(damage, **kwargs):
-    to_kill = 4
-    print(kwargs)
+    to_kill = 4 - int(kwargs['FLESH_WOUND'])
     if "OBSCURED" in kwargs and kwargs["OBSCURED"]:
         to_kill += 1
-        
     # Roll Dice
     rolls = roll_dices(damage)
 
@@ -108,13 +106,20 @@ def injury_roll(damage, **kwargs):
     if "NECRONS" in kwargs and kwargs["NECRONS"] and (6 in rolls):
         return False
     would_kill = [dice >= to_kill for dice in rolls]
+    print(would_kill)
     return sum(would_kill)>0
 
 def random_stat(stat_string):
-    roll_value = int(stat_string.strip('D'))
-    return randrange(1, roll_value+1)
+    '''Converts a string like '2D6' to a stat by rolling the values.'''
+    multiplier = 1
+    temp_stat = 0
+    if len(stat_string) == 3:
+        multiplier += int(stat_string[0]) - 1
+    roll_value = int(stat_string[-2:].strip('D'))
+    for i in range(0, multiplier):
+        temp_stat += randrange(1, roll_value+1)
+    return temp_stat
     
-
 def formatAttacker(attackerArg):
     '''Formats the attackers stats to int. Strips + for e.g. WS 3+
     and sets random value for e.g. "D6".''' # TODO Major Perfomance Issues
@@ -127,6 +132,8 @@ def formatAttacker(attackerArg):
     # Weapon Skill / Ballistic Skill
     if '+' in attacker['WS/BS']:
         attacker['WS/BS'] = int(attacker['WS/BS'].strip('+'))
+    elif 'a' in attacker['WS/BS'] or 'A' in attacker['WS/BS']:
+        attacker['WS/BS'] = 0
     else:
         attacker['WS/BS'] = int(attacker['WS/BS'])
     # Strength
@@ -173,6 +180,19 @@ def formatDefender(defenderArg):
     else:
         defender['FNP'] = int(defender['FNP'])
     return defender
+
+def beautifyAverageDict(results):
+    '''Beautifies the mean outcome dictionary for properly being able
+    to iterate over and create a decent looking table for the website.
+    '''
+    btfy_results = {}
+    btfy_results['Hits'] = results['hits']
+    btfy_results['Wounds'] = results['wounds']
+    btfy_results['Unsaved Wounds'] = results['unsaved_wounds']
+    btfy_results['Inflicted Damage'] = results['damage_inflicted']
+    btfy_results['Injury Roll occured'] = "{:.2f}".format(results['injury_rolled'] * 100) + '%'
+    btfy_results['Model was killed'] = "{:.2f}".format(results['killed_model'] * 100) + '%'
+    return btfy_results
 
 def simulateAllRolls(attackerArg, defenderArg, n_simulations, **kwargs):
     results = {'hits': [], 'wounds': [], 'unsaved_wounds': [], 

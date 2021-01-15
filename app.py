@@ -1,5 +1,4 @@
 from flask import Flask, render_template, url_for, request, redirect
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from kt_simulation import * 
 
@@ -19,13 +18,15 @@ def index():
         exception_rules = {}
         for key in request.form:
             if key not in attacker and key not in defender:
-                exception_rules[request.form[key]] = True
+                if key == "FLESH_WOUND":
+                    exception_rules[key] = request.form[key]
+                else:
+                    exception_rules[request.form[key]] = True
                 print("NOT IN STATS ", key)
                 print("VALUE: ", request.form[key])
-
-
         try:
             results = simulateAllRolls(attacker, defender, 10**4, **exception_rules)
+            results = beautifyAverageDict(results)
         except:
             return '''There is something wrong with your inputs.
             Either something is not supported yet, or you forgot to

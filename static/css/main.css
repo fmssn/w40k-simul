@@ -10,6 +10,7 @@ body, html {
 
 table, td, th {
     border: 1px solid #aaa;
+    padding: 5px 10px 5px 5px;
 }
 
 table.entrytable table, table.entrytable td, table.entrytable th{
@@ -19,6 +20,15 @@ table.entrytable table, table.entrytable td, table.entrytable th{
     margin-right:auto;
 }
 
+h6 {
+    display: inline;
+    font-size: .83em;
+    margin-top: 1.67em;
+    margin-bottom: 1.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
 
 table {
     border-collapse: collapse;
