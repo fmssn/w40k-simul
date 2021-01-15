@@ -15,8 +15,17 @@ def index():
             attacker[stat] = request.form[stat]
         for stat in defender.keys():
             defender[stat] = request.form[stat]
+        
+        exception_rules = {}
+        for key in request.form:
+            if key not in attacker and key not in defender:
+                exception_rules[request.form[key]] = True
+                print("NOT IN STATS ", key)
+                print("VALUE: ", request.form[key])
+
+
         try:
-            results = simulateAllRolls(attacker, defender, 10**4)
+            results = simulateAllRolls(attacker, defender, 10**4, **exception_rules)
         except:
             return '''There is something wrong with your inputs.
             Either something is not supported yet, or you forgot to

@@ -20,18 +20,18 @@ def roll_dices(n):
 def hit(attacks, ws_bs, **kwargs):
     # Determine what dice is hit
     to_hit = ws_bs
-    if OBSCURED:
+    if "OBSCURED" in kwargs and kwargs["OBSCURED"]:
         to_hit += 1
     
     # Roll Dice
     rolls = roll_dices(attacks)
 
     # Rerolls
-    if RR_HIT_1:
+    if "RR_HIT_1" in kwargs and kwargs["RR_HIT_1"]:
         for index, dice in enumerate(rolls):
             if dice == 1:
                 rolls[index] = diceroll()
-    if RR_HIT_ALL:
+    if "RR_HIT_ALL" in kwargs and kwargs["RR_HIT_ALL"]:
         for index, dice in enumerate(rolls):
             if dice < to_hit:
                 rolls[index] = diceroll()
@@ -59,11 +59,11 @@ def wound(hits, strength, toughness, **kwargs):
     rolls = roll_dices(hits)
 
     # Rerolls
-    if RR_WOUND_1:
+    if "RR_WOUND_1" in kwargs and kwargs["RR_WOUND_1"]:
         for index, dice in enumerate(rolls):
             if dice == 1:
                 rolls[index] = diceroll()
-    if RR_WOUND_ALL:
+    if "RR_WOUND_ALL" in kwargs and kwargs["RR_WOUND_ALL"]:
         for index, dice in enumerate(rolls):
             if dice < to_wound:
                 rolls[index] = diceroll()
@@ -97,14 +97,15 @@ def make_dmg(damage, feel_no_pain, unsaved_wounds, **kwargs):
 
 def injury_roll(damage, **kwargs):
     to_kill = 4
-    if OBSCURED:
+    print(kwargs)
+    if "OBSCURED" in kwargs and kwargs["OBSCURED"]:
         to_kill += 1
         
     # Roll Dice
     rolls = roll_dices(damage)
 
     # Check if killed
-    if NECRONS and (6 in rolls):
+    if "NECRONS" in kwargs and kwargs["NECRONS"] and (6 in rolls):
         return False
     would_kill = [dice >= to_kill for dice in rolls]
     return sum(would_kill)>0
@@ -218,14 +219,6 @@ P_kiss = {'A': 4, 'WS/BS': 3, 'S': 4, 'AP': -1, 'D': 'D3'} # Player with Harlequ
 # Globals
 N = 10**4
 
-OBSCURED = False
-NECRONS = False
-
-# Rerolls possible?
-RR_HIT_1 = False
-RR_HIT_ALL = False
-RR_WOUND_1 = False
-RR_WOUND_ALL = False
 
     
 if __name__ == '__main__':

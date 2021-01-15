@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>w40ksimul</title>
+<title>Killteam Simulation</title>
 {% endblock %}
 
 {% block body %}
@@ -54,10 +54,34 @@
                         <input type="int" name="FNP" value="{{request.form['FNP']}}">  
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" name="obscured" value="OBSCURED" unchecked>
+                        <label for="obscured">Obscured (Shooting)</label>
+                    </td>
+                    <td>
+                        <label for="hit_reroll">Hit Re-Rolls</label>
+                        <br></br>
+                        <select name="hit_reroll">
+                            <option value="RR_HIT_NONE">No rerolls</option>
+                            <option value="RR_HIT_1">Reroll ones</option>
+                            <option value="RR_HIT_ALL">Reroll all failed</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="wound_reroll">Wound Re-Rolls</label>
+                        <br></br>
+                        <select name="wound_reroll">
+                            <option value="RR_WOUND_NONE">No rerolls</option>
+                            <option value="RR_WOUND_1">Reroll ones</option>
+                            <option value="RR_WOUND_ALL">Reroll all failed</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
             <div style="text-align:center">
                 <br></br>
-                <input class="submittype" name="button" type="submit" value="Simulate">
+                <input class="submittype" type="submit" value="Simulate">
                 <br></br>
             </div>
         </form>
