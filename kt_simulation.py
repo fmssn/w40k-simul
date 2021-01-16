@@ -12,14 +12,15 @@ def diceroll():
 
 def roll_dices(n):
     rolls = []
-    for dice in range(0,n):
+    for __ in range(0,n):
         roll = diceroll()
         rolls.append(roll)
     return rolls
 
 def hit(attacks, ws_bs, **kwargs):
     # Determine what dice is hit
-    to_hit = ws_bs
+    print(kwargs)
+    to_hit = ws_bs - kwargs['HIT_MOD']
     if "OBSCURED" in kwargs and kwargs["OBSCURED"]:
         to_hit += 1
     
@@ -35,9 +36,15 @@ def hit(attacks, ws_bs, **kwargs):
         for index, dice in enumerate(rolls):
             if dice < to_hit:
                 rolls[index] = diceroll()
+    
+    # Exploding 6's
+    if "EXP6_HIT_GENERATE1" in kwargs and kwargs["EXP6_HIT_GENERATE1"]:
+        for dice in rolls:
+            if dice == 6:
+                rolls.append(diceroll())
 
     # Check if hitted
-    hitted = [dice >= to_hit for dice in rolls]
+    hitted = [dice >= to_hit and dice != 1 or dice == 6 for dice in rolls]
     hits = sum(hitted)  
     return hits
 
@@ -54,7 +61,8 @@ def wound(hits, strength, toughness, **kwargs):
         to_wound = 6
     else:
         raise ValueError('Strength or toughness not valid.')
-    
+    to_wound -= kwargs['WOUND_MOD']
+
     # Roll Dice
     rolls = roll_dices(hits)
 
@@ -69,7 +77,7 @@ def wound(hits, strength, toughness, **kwargs):
                 rolls[index] = diceroll()
 
     # Check if wounded
-    wounded = [dice >= to_wound for dice in rolls]
+    wounded = [dice >= to_wound and dice != 1 or dice == 6 for dice in rolls]
     wounds = sum(wounded)  
     return wounds
       
@@ -106,7 +114,6 @@ def injury_roll(damage, **kwargs):
     if "NECRONS" in kwargs and kwargs["NECRONS"] and (6 in rolls):
         return False
     would_kill = [dice >= to_kill for dice in rolls]
-    print(would_kill)
     return sum(would_kill)>0
 
 def random_stat(stat_string):
@@ -161,21 +168,21 @@ def formatDefender(defenderArg):
     # Save (normal)
     if '+' in defender['Sv']:
         defender['Sv'] = int(defender['Sv'].strip('+'))
-    elif defender['Sv'] == '':
+    elif defender['Sv'] in ['', '0']:
         defender['Sv'] = 7
     else:
         defender['Sv'] = int(defender['Sv'])
     # Invulnerable Save
     if '+' in defender['iSv']:
         defender['iSv'] = int(defender['iSv'].strip('+'))
-    elif defender['iSv'] == '':
+    elif defender['iSv'] in ['', '0'] :
         defender['iSv'] = 7
     else:
         defender['iSv'] = int(defender['iSv'])
     # Feel No Pain
     if '+' in defender['FNP']:
         defender['FNP'] = int(defender['FNP'].strip('+'))
-    elif defender['FNP'] == '':
+    elif defender['FNP'] in ['','0']: 
         defender['FNP'] = 7
     else:
         defender['FNP'] = int(defender['FNP'])

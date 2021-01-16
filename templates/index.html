@@ -56,26 +56,84 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="checkbox" name="obscured" value="OBSCURED" unchecked>
-                        <label for="obscured"><h6>Obscured (Shooting)</h6></label>
+                        <table class="entrytable">
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="obscured" value="OBSCURED" unchecked>
+                                </td>
+                                <td>
+                                    <label for="obscured"><h6>Obscured (Shooting)</h6></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="NECRONS" value="NECRONS" unchecked>
+                                </td>
+                                <td>
+                                    <label for="NECRONS"><h6>Necrons Reaninmation<br>Protocol</h6></label>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td>
-                        <label for="hit_reroll"><h6>Hit Re-Rolls</h6></label>
-                        <br></br>
-                        <select name="hit_reroll">
-                            <option value="RR_HIT_NONE">No rerolls</option>
-                            <option value="RR_HIT_1">Reroll ones</option>
-                            <option value="RR_HIT_ALL">Reroll all failed</option>
-                        </select>
+                        <table class='entrytable'>
+                            <h6>Re-Rolls</h6>
+                            <tr>
+                                <td><label for="hit_reroll"><h6>Hit</h6></label></td>
+                                <td>
+                                    <select name="hit_reroll">
+                                        <option value="RR_HIT_NONE">No rerolls</option>
+                                        <option value="RR_HIT_1">Reroll ones</option>
+                                        <option value="RR_HIT_ALL">Reroll all failed</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <br>
+                            <tr>
+                                <td><label for="wound_reroll"><h6>Wound</h6></label></td>
+                                <td>
+                                    <select name="wound_reroll">
+                                        <option value="RR_WOUND_NONE">No rerolls</option>
+                                        <option value="RR_WOUND_1">Reroll ones</option>
+                                        <option value="RR_WOUND_ALL">Reroll all failed</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td>
-                        <label for="wound_reroll"><h6>Wound Re-Rolls</h6></label>
-                        <br></br>
-                        <select name="wound_reroll">
-                            <option value="RR_WOUND_NONE">No rerolls</option>
-                            <option value="RR_WOUND_1">Reroll ones</option>
-                            <option value="RR_WOUND_ALL">Reroll all failed</option>
-                        </select>
+                        <table class='entrytable'>
+                            <h6>Roll Modifier</h6>
+                            <tr>
+                                <td><label for="HIT_MOD"><h6>Hit</h6></label></td>
+                                <td>
+                                    <select name="HIT_MOD">
+                                        <option value="0">0</option>
+                                        <option value="1">+1</option>
+                                        <option value="2">+2</option>
+                                        <option value="3">+3</option>
+                                        <option value="-1">-1</option>
+                                        <option value="-2">-2</option>
+                                        <option value="-3">-3</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <br>
+                            <tr>
+                                <td><label for="WOUND_MOD"><h6>Wound</h6></label></td>
+                                <td>
+                                    <select name="WOUND_MOD">
+                                        <option value="0">0</option>
+                                        <option value="1">+1</option>
+                                        <option value="2">+2</option>
+                                        <option value="3">+3</option>
+                                        <option value="-1">-1</option>
+                                        <option value="-2">-2</option>
+                                        <option value="-3">-3</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td>
                         <label for="FLESH_WOUND"><h6>Flesh Wounds (Defender)</h6></label>
@@ -87,19 +145,30 @@
                             <option value="3">3 Flesh Wounds</option>
                         </select>
                     </td>
-                    <!--
-                    <td>
-                        <select name="ddl" size=4 multiple>
-                            <option value='blue'>Blue</option>
-                            <option value='green'>Green</option>
-                            <option value='red'>Red</option>
-                            <option value='yellow'>Yelllow</option>
-                            <option value='' selected>Select a Color </option>
-                            <option value='white'>White</option>
-                        </select>
-                    </td> 
-                    -->
                 </tr>
+            </table>
+            <table class='entrytable'>
+                <tr><td colspan="2"><h6>Exploding 6s</h6></td></tr>
+                <tr>
+                    <td><label for="EXP6_HIT"><h6>6 on Hit Roll</h6></label></td>
+                    <td>
+                        <select name="EXP6_HIT">
+                            <option value="NO_EXP6_HIT">-</option>
+                            <option value="EXP6_HIT_GENERATE1">Generate one extra attack</option>
+                        </select>
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                    <td><label for="EXP6_WOUND"><h6>6 on Wound Roll</h6></label></td>
+                    <td>
+                        <select name="EXP6_WOUND">
+                            <option value="NO_EXP6_WOUND">-</option>
+                            <option value="EXP6_WOUND_D3MW">Make D3 Mortal Wounds</option>
+                        </select>
+                    </td>
+                </tr>
+                -->
             </table>
             <div style="text-align:center">
                 <br></br>
@@ -140,7 +209,7 @@
         <h4>Remark</h4>
         This application is a simulation and does not calculate explicit expectation values. Why did I choose that? It is way easier to implement certain exception rules (like 'D6' for damage, obscurity) with a simulation. But, as this is a Monte-Carlo-Simulation for currently 10.000 rounds, you will see deviation from simulation to simulation for the same values. As I will increase performance, I will probably be able to bump it up to 100.000 simulation, which will further decrease deviations between simulations.
         <br><br>
-        Next thing I will be implementing are Exploding 6s on hit and wound rolls as well as the Necron Reanimation Protocols.
+        Next thing I will be implementing are more Exploding 6s effects, such as on wound generate D3 Mortal Wounds.
         <br><br>
         If you are missing a feature or have any other criticism, feel free to hit me up on Discord: <b>alpecinjunky (Babyl0n)#7488</b>
     </span>

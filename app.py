@@ -4,6 +4,7 @@ from kt_simulation import *
 
 app = Flask(__name__)
 
+
 @app.route('/', methods=['POST', 'GET'])
 def index(): 
     if request.method == 'POST':
@@ -16,14 +17,16 @@ def index():
             defender[stat] = request.form[stat]
         
         exception_rules = {}
+        exception_ints = ['FLESH_WOUND', 'HIT_MOD', 'WOUND_MOD']
         for key in request.form:
             if key not in attacker and key not in defender:
-                if key == "FLESH_WOUND":
-                    exception_rules[key] = request.form[key]
+                if key in exception_ints:
+                    exception_rules[key] = int(request.form[key])
                 else:
                     exception_rules[request.form[key]] = True
                 print("NOT IN STATS ", key)
                 print("VALUE: ", request.form[key])
+
         try:
             results = simulateAllRolls(attacker, defender, 10**4, **exception_rules)
             results = beautifyAverageDict(results)
