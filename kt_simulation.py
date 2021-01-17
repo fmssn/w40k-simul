@@ -18,11 +18,8 @@ def roll_dices(n):
     return rolls
 
 def hit(attacks, ws_bs, **kwargs):
-    # Determine what dice is hit
     print(kwargs)
-    to_hit = ws_bs - kwargs['HIT_MOD']
-    if "OBSCURED" in kwargs and kwargs["OBSCURED"]:
-        to_hit += 1
+    to_hit = ws_bs
     
     # Roll Dice
     rolls = roll_dices(attacks)
@@ -36,6 +33,11 @@ def hit(attacks, ws_bs, **kwargs):
         for index, dice in enumerate(rolls):
             if dice < to_hit:
                 rolls[index] = diceroll()
+
+    # Rerolls after after any hit mod
+    to_hit -= kwargs['HIT_MOD']
+    if "OBSCURED" in kwargs and kwargs["OBSCURED"]:
+        to_hit += 1
     
     # Exploding 6's
     if "EXP6_HIT_GENERATE1" in kwargs and kwargs["EXP6_HIT_GENERATE1"]:
@@ -61,7 +63,7 @@ def wound(hits, strength, toughness, **kwargs):
         to_wound = 6
     else:
         raise ValueError('Strength or toughness not valid.')
-    to_wound -= kwargs['WOUND_MOD']
+    
 
     # Roll Dice
     rolls = roll_dices(hits)
@@ -75,6 +77,9 @@ def wound(hits, strength, toughness, **kwargs):
         for index, dice in enumerate(rolls):
             if dice < to_wound:
                 rolls[index] = diceroll()
+
+    # Rerolls are before any wound mods
+    to_wound -= kwargs['WOUND_MOD']
 
     # Check if wounded
     wounded = [dice >= to_wound and dice != 1 or dice == 6 for dice in rolls]
