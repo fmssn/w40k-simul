@@ -1,2 +1,2 @@
 # w40k-simul
-https://killteam-simul.herokuapp.com/
+As Kill Team got a new rulebook and heroku is shutting down their free service, for the moment this app is no longer available.
